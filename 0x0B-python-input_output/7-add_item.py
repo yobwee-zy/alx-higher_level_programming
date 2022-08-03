@@ -1,18 +1,28 @@
 #!/usr/bin/python3
-"""Program to add load and save a add_item.json file"""
+"""
+This program take the file add_item.json, and add the
+parameters to the list inside this file.
+- If the file doesn't exist create it.
+- If no exist parameters do nothing or create the list if the file is empty.
+"""
 
-import sys
+from sys import argv
+from os.path import exists
 
+save_to_json_file = __import__("5-save_to_json_file").save_to_json_file
+load_from_json_file = __import__("6-load_from_json_file").load_from_json_file
 
-if __name__ == "__main__":
+namefile = "add_item.json"
+argc = len(argv)
 
-    save = __import__('5-save_to_json_file').save_to_json_file
-    load = __import__('6-load_from_json_file').load_from_json_file
+file_list = []
 
-    try:
-        l_items = load("add_item.json")
-    except FileNotFoundError:
-        l_items = []
+if exists(namefile):
+    file_list = load_from_json_file(namefile)
 
-    l_items.extend(sys.argv[1:])
-    save(l_items, "add_item.json")
+if (argc == 1):
+    save_to_json_file(file_list, namefile)
+else:
+    for index in range(1, argc):
+        file_list.append(argv[index])
+    save_to_json_file(file_list, namefile)
